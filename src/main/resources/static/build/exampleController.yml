@@ -1,0 +1,21 @@
+http:
+  script: "int i = 5;"
+  context:
+    script: "String token = \"jwt-dsfbfdsbgfbfb54gb4v45g45g4\";"
+    source:
+      file: "/files/myXml.xml"
+    ssltoken: "jwt-ssl-eve4rh34rh34vfu347f34f3bfv"
+  api:
+    api1:
+      delay:
+        type: base
+        value: 55 
+      method: get
+      path: "/mock/id/{id}/get"
+      produces: "application/json"
+      #consumes: "application/json"
+      headers:
+        mySyperheader: 'superValue'
+      result:
+        status: 200
+        value: "${source}"

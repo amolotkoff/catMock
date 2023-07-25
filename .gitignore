@@ -149,16 +149,6 @@ $RECYCLE.BIN/
 *.iml
 *.ipr
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
 ### VS Code ###
 .vscode/
 
@@ -169,7 +159,6 @@ build/
 *#
 *~
 bin
-build
 target
 *.sublime-*
 /scratch
