@@ -1,0 +1,33 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Управление временем ответа</title>
+    <script type="text/javascript" src="/js/libs/vue.js" />
+</head>
+<body>
+<table>
+    <thead>Select</thead>
+    <tbody>
+    <th:block th:each="delay : ${delays}">
+        <tr>
+            <td>
+                <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+                <div>
+                    <form target="dummyframe" method="post" enctype="multipart/form-data" th:action="@{/response-delay/set/{url}(url=${delay.key})}">
+                        <label th:text="${delay.key}" id="delay_" style="background-color:#00573F"/>
+                        <div style="display:inline-block;width:80%">
+                            <th:block th:each="delayKey : ${delay.value}">
+                                <label th:text="${delayKey.key}"/>
+                                <input type="number" th:attr="name=${delayKey.key}" th:value="${delayKey.value.Value}"/>
+                            </th:block>
+                        </div>
+                        <div style="display:inline-block;">
+                            <button type="submit" name="action" value="update">Обновить</button>
+                            <button type="submit" name="action" value="init">Исходное</button>
+                        </div>
+                    </form>
+                </div>
+    </th:block>
+    </tbody>
+</table>
+</body>
+</html>

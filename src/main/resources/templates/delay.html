@@ -1,0 +1,80 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link href="/styles/icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="/styles/materialize.min.css">
+        <link rel="stylesheet" href="/styles/index.css">
+        <title>Document</title>
+        <script src="/js/libs/jquery.js"></script>
+    </head>
+    <body>
+    <div class="app-main-layout">
+            <nav class="navbar orange lighten-1"></nav>
+            <ul class="sidenav app-sidenav open">
+                <li>
+                    <a href="/mock/service" class="waves-effect waves-orange pointer">Главная</a>
+                </li>
+            </ul>
+            <main class="app-content">
+                <div class="app-page">
+                    <div>
+                        <div class="page-title">
+                            <h3>Сервис замедления</h3>
+                        </div>
+                    </div>
+                    <div class="history-chart"><canvas></canvas></div>
+
+                    <th:block th:each="controller : ${apis}">
+                        <div class="page-title">
+                            <h3><b th:text="${controller.key}"></b></h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width : 20%">Имя</th>
+                                    <th style="width : 20%">Путь</th>
+                                    <th style="width : 10%">Замедление</th>
+                                    <th style="width : 20%"></th>
+                                    <th style="width : 15%"></th>
+                                    <th style="width : 15%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="controller_api : ${controller.value}" th:api-parent="${controller.key}">
+                                    <th th:text="${controller_api.get('name')}" style="width : 20%" class="api-name"></th>
+                                    <th th:text="${controller_api.get('path')}" style="width : 20%"></th>
+                                    <th style="width : 10%">
+                                        <span class="white-text badge red" th:text="${controller_api.get('delay').get('type')}"></span>
+                                    </th>
+                                    <th style="width: 20%;">
+                                        <table style="margin-right:auto;margin-left:0px">
+                                            <tr th:each="delay_key : ${controller_api.get('delay').get('keys')}">
+                                                <th th:text="${delay_key.key}"></th>
+                                                <th>
+                                                    <input type="number" min="0" th:value="${delay_key.value.Value}" class="user-input" th:name="${delay_key.key}">
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </th>
+                                    <td style="width : 15%">
+                                        <button class="btn-small btn update-btn">
+                                            <i class="material-icons">Замедлить</i>
+                                        </button>
+                                    </td>
+                                    <td style="width : 15%">
+                                        <button class="btn-small btn return-btn">
+                                            <i class="material-icons">Исходное</i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th:block>
+                </div>
+            </main>
+        </div>
+        <script src="/js/main.js"></script>
+    </body>
+</html>
