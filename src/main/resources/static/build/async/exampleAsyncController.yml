@@ -1,0 +1,13 @@
+async:
+    timeout: 1000
+    method: get
+    path: 'http://localhost:8080/${id}/mock/get'
+    script: '' #some script executing every executing
+    headers: 
+        myHeader: 'myHeaderValue'
+    params:
+        param1: 'value1'
+    body:
+        value: 'blabla'
+    check:
+        status: 200
