@@ -47,7 +47,7 @@ public class AsyncParser {
         Param[] params = new ParamsParser(asyncMap, parentPath).Parse();
         String responseBody = new BodyValueParser(asyncMap, parentPath).Parse();
         HttpStatus[] accepting = new AcceptStatusParser(asyncMap, parentPath).Parse();
-        HashMap<String, String> resultHeaders = new HeadersParser(asyncMap).Parse();
+        HashMap<String, String> resultHeaders = new HeadersParser(asyncMap, parentPath).Parse();
 
         return new AsyncApi(FileUtil.GetBaseFileName(path, true),
                             requestPath,

@@ -2,6 +2,7 @@ package com.amolotkoff.mocker.reflect;
 
 import com.amolotkoff.mocker.file.FileUtil;
 import com.amolotkoff.mocker.parser.model.api.Api;
+import com.amolotkoff.mocker.parser.model.context.SubContext;
 import com.amolotkoff.mocker.parser.model.http.HttpControllerModel;
 import com.amolotkoff.mocker.register.*;
 import com.amolotkoff.mocker.util.*;
@@ -104,6 +105,12 @@ public class ControllerReflectBuilder {
             contextServiceField.set(instance, contextService);
 
             //inject delaysFactories and inject values to controllers
+
+            for (SubContext context : model.getContext().getSubContexts()) {
+                Field contextField = clazz.getDeclaredField(context.getName());
+                contextField.setAccessible(true);
+                contextField.set(instance, context.getValue());
+            }
 
             for (Api api : model.getApis()) {
                 DelayContainer delayContainer = api.getDelay();

@@ -58,7 +58,7 @@ public class APIsParser {
 
 
         ScriptModel scriptModel = new ScriptParser(map).Parse();
-        HashMap<String, String> resultHeaders = new HeadersParser(map).Parse();
+        HashMap<String, String> resultHeaders = new HeadersParser(map, path).Parse();
         ResultValue resultValue = new ResultParser(map, path, ResultParser.Word.RESULT).Parse();
         RequestMethod requestMethod = new RequestMethodParser(map).Parse();
         DelayContainer delay = new DelayParser(map).Parse();

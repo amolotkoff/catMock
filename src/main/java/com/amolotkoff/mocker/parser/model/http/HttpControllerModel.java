@@ -67,9 +67,12 @@ public class HttpControllerModel {
         return String.format("%s.%s", CONTROLLER_PACKAGE, name);
     }
 
+    public MainContext getContext() {
+        return context;
+    }
+
     @Override
     public String toString() {
-
         StringBuilder packageBuilder = new StringBuilder();
         StringBuilder contextBuilder = new StringBuilder();
         StringBuilder constructorBuilder = new StringBuilder();
@@ -145,11 +148,11 @@ public class HttpControllerModel {
     private void context(StringBuilder context) {
         for (SubContext subContext : this.context.getSubContexts()) {
             if (subContext.getType().getSimpleName().equals(String.class.getSimpleName())) //check if we deal with String type
-                context.append(String.format("\tprivate String %s = %s\n", subContext.getName(), formatString((String)subContext.getValue())));
+                context.append(String.format("\tprivate String %s;\n", subContext.getName()));
             else if (subContext.getType().getSimpleName().equals(Character.class.getSimpleName()))
-                context.append(String.format("\tprivate %s %s = \'%s\';\n", subContext.getType().getSimpleName(), subContext.getName(), subContext.getValue()));
+                context.append(String.format("\tprivate %s %s = \'\';\n", subContext.getType().getSimpleName(), subContext.getName()));
             else
-                context.append(String.format("\tprivate %s %s = %s;\n", subContext.getType().getSimpleName(), subContext.getName(), subContext.getValue()));
+                context.append(String.format("\tprivate %s %s;\n", subContext.getType().getSimpleName(), subContext.getName()));
         }
     }
 

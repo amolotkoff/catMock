@@ -3,7 +3,7 @@ async:
     method: get
     path: 'http://localhost:8080/${id}/mock/get'
     script: '' #some script executing every executing
-    headers: 
+    headers:
         myHeader: 'myHeaderValue'
     params:
         param1: 'value1'

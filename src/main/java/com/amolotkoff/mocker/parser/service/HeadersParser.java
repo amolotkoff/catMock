@@ -1,32 +1,53 @@
 package com.amolotkoff.mocker.parser.service;
 
+import com.amolotkoff.mocker.file.FileUtil;
 import com.amolotkoff.mocker.parser.exceptions.NotMapException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HeadersParser {
     private final Logger logger;
     private final Object map;
+    private final String path;
 
-    public HeadersParser(Object map) {
+    public HeadersParser(Object map, String path) {
         this.logger = LogManager.getRootLogger();
         this.map = map;
+        this.path = path;
     }
 
     public HashMap<String, String> Parse() throws Exception {
         logger.info("\tparse headers...");
-        HashMap<String, String> header_map = Util.get(map, "headers");
-        HashMap<String, String> headers = new HashMap<>();
 
-        if (header_map == null)
+        if (Util.has(map, "headers")) {
+            HashMap<String, Object> headersMap = Util.get(map, "headers");
+            HashMap<String, String> headers = new HashMap<>();
+
+            for (Map.Entry<String, Object> entry : headersMap.entrySet()) {
+                String headerName = entry.getKey();
+                Object header = entry.getKey();
+
+                if (Util.isMap(header))
+                    if (Util.has(header, "file")) {
+                        String relateHeaderFile = Util.get(header, "file");
+                        Path filePath = Paths.get(path, relateHeaderFile);
+                        String file = FileUtil.Load(filePath);
+                        headers.put(headerName, file);
+                        continue;
+                    }
+
+                headers.put(entry.getKey(), header.toString());
+            }
+
             return headers;
+        }
 
-        for (Map.Entry<String, String> entry : header_map.entrySet())
-            headers.put(entry.getKey(), entry.getValue());
-
-        return headers;
+        return new HashMap<>();
     }
 }

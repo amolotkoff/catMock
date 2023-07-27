@@ -42,13 +42,12 @@ public class ContextParser {
             if (!contextName.equals("script")) {
                 Object contextValue = varEntry.getValue();
 
-                if (contextValue instanceof HashMap) {
+                if (Util.isMap(contextValue)) {
                     HashMap<String, Object> contextMap = (HashMap<String, Object>) contextValue;
 
                     if (contextMap.containsKey("file")) {
                         Path filePath = Paths.get(path, contextMap.get("file").toString());
                         String file = FileUtil.Load(filePath);
-                        file = FileUtil.FormatFile(file, FilenameUtils.getExtension(filePath.toString()));
                         models.add(new SubContext(contextName, String.class, file));
                     }
                 }
