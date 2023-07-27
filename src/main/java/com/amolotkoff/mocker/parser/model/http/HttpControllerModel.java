@@ -7,6 +7,7 @@ import com.amolotkoff.mocker.parser.model.api.Api;
 import com.amolotkoff.mocker.parser.model.api.AsyncApi;
 import com.amolotkoff.mocker.parser.model.context.MainContext;
 import com.amolotkoff.mocker.parser.model.context.SubContext;
+import com.amolotkoff.mocker.parser.model.params.Param;
 import com.amolotkoff.mocker.parser.model.result.ResultValue;
 import com.amolotkoff.mocker.util.IDelayFactory;
 import io.netty.handler.codec.Headers;
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -317,12 +319,32 @@ public class HttpControllerModel {
             methodsBuilder.append("\n\t\t.doOnSuccess(c -> {\n");
             //methodsBuilder.append(String.format("\t\t\tlogger.info(\"async %s\");\n", api.getAsyncApi().getName())); //log info
 
+            //async api contexts
+            MainContext asyncApiContext = asyncApi.getContext();
+
+            for(SubContext subContext : asyncApiContext.getSubContexts()) {
+                String contextValue = "%s";
+
+                if (subContext.getType().equals(String.class))
+                    contextValue = "\"" + contextValue + "\"";
+
+                contextValue = String.format(contextValue, subContext.getValue());
+                methodsBuilder.append(String.format("\t\t\t%s %s = %s;\n", subContext.getType().getSimpleName(), subContext.getName(), contextValue.toString()));
+            }
+
+            methodsBuilder.append(String.format("\t\t\t%s\n", asyncApiContext.getCode()));
+
+            //async api query-params
+
+            for(Param queryParam : asyncApi.getParams())
+                methodsBuilder.append(String.format("\t\t\tString %s = \"%s\";\n", queryParam.getName(), queryParam.getValue()));
+
             if(needsBody(asyncApi)) {
                 methodsBuilder.append(String.format("\t\t\tString requestBody = \"%s\";\n", asyncApi.getBody()));
             }
 
             //TODO:
-            // async: build request path fine way
+            // async: add headers
 
             methodsBuilder.append(String.format("\t\t\tString requestPath=\"%s\";\n", asyncApi.getPath()));
             //methodsBuilder.append(String.format("\t\t")); set headers!
@@ -338,8 +360,18 @@ public class HttpControllerModel {
             methodsBuilder.append(String.format("\tDisposable clientRequest = this.asyncWebClient_%s.%s()\n", asyncApi.getName(),
                                                 asyncApi.getRequestMethod().toString().toLowerCase()));
 
+            //async request path builder: path and query params
+            StringBuilder pathParamsAppendBuilder = new StringBuilder();
 
-            methodsBuilder.append(String.format("\t\t\t\t\t\t\t.uri(requestPath)\n"));
+            Pattern pathPattern = Pattern.compile("\\{\\w+\\}");
+            Matcher matcher = pathPattern.matcher(asyncApi.getPath());
+
+            while(matcher.find()) {
+                String substituteParam = matcher.group().substring(1, matcher.group().length() - 1);
+                pathParamsAppendBuilder.append(", " + substituteParam);
+            }
+
+            methodsBuilder.append(String.format("\t\t\t\t\t\t\t.uri(requestPath%s)\n", pathParamsAppendBuilder));
 
             //headers
             //TODO:

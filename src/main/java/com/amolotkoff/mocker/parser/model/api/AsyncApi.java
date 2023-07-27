@@ -2,6 +2,7 @@ package com.amolotkoff.mocker.parser.model.api;
 
 import com.amolotkoff.mocker.parser.model.Import;
 import com.amolotkoff.mocker.parser.model.ScriptModel;
+import com.amolotkoff.mocker.parser.model.context.MainContext;
 import com.amolotkoff.mocker.parser.model.params.Param;
 import com.amolotkoff.mocker.parser.model.result.ResultValue;
 import com.amolotkoff.mocker.util.DelayContainer;
@@ -25,6 +26,7 @@ public class AsyncApi {
     private String body;
     private Import imports;
     private HttpStatus[] accepting;
+    private MainContext mainContext;
 
     public AsyncApi(String name,
                     String path,
@@ -33,6 +35,7 @@ public class AsyncApi {
                     HashMap<String, String> resultHeaders,
                     DelayContainer delayContainer,
                     ScriptModel script,
+                    MainContext mainContext,
                     Param[] params,
                     String body,
                     Import imports,
@@ -45,6 +48,7 @@ public class AsyncApi {
         this.delayContainer = delayContainer;
         this.resultHeaders = resultHeaders;
         this.script = script;
+        this.mainContext = mainContext;
         this.params = params;
         this.body = body;
         this.imports = imports;
@@ -54,35 +58,27 @@ public class AsyncApi {
     public String getName() {
         return name;
     }
-
     public String getPath() {
         return path;
     }
-
     public RequestMethod getRequestMethod() {
         return requestMethod;
     }
-
     public Collection<String> getProduces() {
         return produces;
     }
-
     public DelayContainer getDelay() {
         return delayContainer;
     }
-
     public HashMap<String, String> getResultHeaders() {
         return resultHeaders;
     }
-
     public Param[] getParams() {
         return params;
     }
-
     public ScriptModel getScript() {
         return script;
     }
-
     public String getBody() {
         return body;
     }
@@ -91,5 +87,8 @@ public class AsyncApi {
     }
     public HttpStatus[] getAccepting() {
         return accepting;
+    }
+    public MainContext getContext() {
+        return mainContext;
     }
 }
