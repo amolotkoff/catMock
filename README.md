@@ -67,6 +67,30 @@ http:
         percentile: 90
         value: 55
 ```
+
+Рассмотрим async-контроллер:
+```yaml
+async: # начинается асинк-контроллер
+    context:
+        id2: "5"
+        id1:
+            file: '/value1.txt'
+        script: 'int b = 10;'
+    timeout: 1000
+    method: get
+    path: 'http://localhost:8080/{id2}/mock/get?id={id2}' # обратите внимание,  {name} замещаются значениями переменных
+    script: '' #some script executing every executing
+    headers:
+        myHeader: 'myHeaderValue'
+    query-params:
+        param1: 'value1'
+    body:
+        value: 'blabla'
+    check:
+        status: 200
+```
+
+
       script: '
         //context.put("param1", "param1"); //этот метод сохраняет переменную в сабститютор
         //context.save("param2","param2"); // этот метод сохраняет переменную для дальнейшего использования в async
