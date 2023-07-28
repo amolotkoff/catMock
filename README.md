@@ -54,9 +54,9 @@ http:
       method: get
       path: "/mock/{id}/get"
       async: 'async/exampleAsyncController.yml' # здесь указываем async-response (http-запрос, выполняемый после обработки входящего запроса) , путь указывается относителньо текущего файла
-      headers: # хедеры ответа
-        mySyperheader: 'superValue'
       result:
+	headers: # хедеры ответа
+	  mySyperheader: 'superValue'
         status: 200
         value:
           file: '/files/myXml.xml' # читаем тело из файлика
@@ -80,33 +80,43 @@ async: # начинается асинк-контроллер
     method: get
     path: 'http://localhost:8080/{id2}/mock/get?id={id2}' # обратите внимание,  {name} замещаются значениями переменных
     script: '' #some script executing every executing
-    headers:
-        myHeader: 'myHeaderValue'
-    query-params:
-        param1: 'value1'
-    body:
+    result:
         value: 'blabla'
+	headers:
+	     myHeader: 'myHeaderValue'
+	query-params: # параметры http запроса
+	    param1: 'value1'
+            param2: ''
     check:
         status: 200
 ```
-
-
-      script: '
-        //context.put("param1", "param1"); //этот метод сохраняет переменную в сабститютор
-        //context.save("param2","param2"); // этот метод сохраняет переменную для дальнейшего использования в async
-        //String dummyResult = context.substitude("mybody"); // метод подставляет значения из субститутора в строку
-        //String param1 = context.get("param1"); // метод возвращает значение параметра по ключу
-        /*
-          Переменные:
-            Входящие:
-              requestBody - значение боди
-              requestHeaders - хедеры
-	      requestPath - URI
-              value_headers -
-		Асинк:
-	        responseBody
-                responseStatus
-                
-        */
-
-
+## Секция Script
+Вставка пользовательского кода 
+```yaml
+api:
+   script: ''
+```
+и
+```yaml
+async:
+   script: ''
+```
+разделяют общий объект-состояние context, имеющий следующие методы:
+```java
+	void put("putParamName", "putParamValue"); //этот метод сохраняет переменную в сабститютор
+        void save("param1", object ); // этот метод сохраняет переменную (для дальнейшего использования в async)
+        String ubstitude("${putParamName}"); // метод подставляет значения из сабститутора в переданную ему строку
+	String get("param1"); // метод возвращает значение параметра по ключу
+```
+### Обработка входящего запроса
+Доступны следующие переменные:
+```java
+ String requestBody; // входящий боди запроса
+ HashMap<String, String> requestHeaders; // входящие хедеры запроса
+ String requestPath; // URI
+```
+### Обраотка async-запроса
+```java
+ String responseBody;// тело исходящего запроса
+ String requestPath; // урла обращения (может содержать {param} параметры для корреляции пути запроса)
+```
