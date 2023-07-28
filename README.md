@@ -44,7 +44,7 @@ http:
       produces: "application/json" # Content-Type
       consumes: "application/json" # Content-Type
       result:
-        status: 200
+	status: 200
         value: "${source}" # так происходит подстановка значения по указанному имени (может содержаться и в файлике) 
       delay:
         type: base
@@ -81,12 +81,12 @@ async: # начинается асинк-контроллер
     path: 'http://localhost:8080/{id2}/mock/get?id={id2}' # обратите внимание,  {name} замещаются значениями переменных
     script: '' #some script executing every executing
     result:
-        value: 'blabla'
+      value: 'blabla'
 	headers:
-	     myHeader: 'myHeaderValue'
+	  myHeader: 'myHeaderValue'
 	query-params: # параметры http запроса
-	    param1: 'value1'
-            param2: ''
+	  param1: 'value1'
+          param2: ''
     check:
         status: 200
 ```
@@ -105,7 +105,7 @@ async:
 ```java
 	void put("putParamName", "putParamValue"); //этот метод сохраняет переменную в сабститютор
         void save("param1", object ); // этот метод сохраняет переменную (для дальнейшего использования в async)
-        String ubstitude("${putParamName}"); // метод подставляет значения из сабститутора в переданную ему строку
+        String substitude("${putParamName}"); // метод подставляет значения из сабститутора в переданную ему строку
 	String get("param1"); // метод возвращает значение параметра по ключу
 ```
 ### Обработка входящего запроса
