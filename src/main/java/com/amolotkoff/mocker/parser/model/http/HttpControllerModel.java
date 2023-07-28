@@ -142,7 +142,7 @@ public class HttpControllerModel {
         //http
 
         for(Api api : apis) {
-            for (Map.Entry<String, String> header : api.getResultHeaders().entrySet())
+            for (Map.Entry<String, String> header : api.getResultValue().getHeaders().entrySet())
                 constructorBuilder.append(String.format("\t\tthis.responseHeaders_%s.add(\"%s\", \"%s\");\n", api.getName(), header.getKey(), header.getValue()));
         }
     }
@@ -268,8 +268,8 @@ public class HttpControllerModel {
             //script of body method
 
             ResultValue result = api.getResultValue();
-            String resultStatus = result.status.name().split(" ")[0];
-            String responseBody = result.body;
+            String resultStatus = result.getStatus().name().split(" ")[0];
+            String responseBody = result.getBody();
 
             //substitution of params when we got response-body ${} matches , TO-DO: refactor smart substitution
 
@@ -336,11 +336,11 @@ public class HttpControllerModel {
 
             //async api query-params
 
-            for(Param queryParam : asyncApi.getParams())
+            for(Param queryParam : asyncApi.getResultValue().getQueryParams())
                 methodsBuilder.append(String.format("\t\t\tString %s = \"%s\";\n", queryParam.getName(), queryParam.getValue()));
 
             if(needsBody(asyncApi)) {
-                methodsBuilder.append(String.format("\t\t\tString requestBody = \"%s\";\n", asyncApi.getBody()));
+                methodsBuilder.append(String.format("\t\t\tString requestBody = \"%s\";\n", asyncApi.getResultValue().getBody()));
             }
 
             //TODO:
@@ -376,7 +376,7 @@ public class HttpControllerModel {
             //headers
             //TODO:
             // add custom header or header substitution
-            for(Map.Entry<String, String> header : api.getAsyncApi().getResultHeaders().entrySet())
+            for(Map.Entry<String, String> header : api.getAsyncApi().getResultValue().getHeaders().entrySet())
                 methodsBuilder.append(String.format("\t\t\t\t\t\t\t.header(\"%s\", \"%s\")\n", header.getKey(), header.getValue()));
 
             if(needsBody(asyncApi)) {

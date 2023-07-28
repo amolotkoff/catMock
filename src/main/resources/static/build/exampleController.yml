@@ -21,9 +21,9 @@ http:
       method: get
       path: "/mock/{id}/get"
       async: 'async/exampleAsyncController.yml'
-      headers:
-        mySyperheader: 'superValue'
       result:
+        headers:
+          mySyperheader: 'superValue'
         status: 200
         value:
           file: '/files/myXml.xml'

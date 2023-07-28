@@ -19,7 +19,6 @@ public class Api {
 
     private DelayContainer delay;
 
-    private HashMap<String, String> resultHeaders;
     private ResultValue resultValue;
     private ScriptModel script;
 
@@ -31,10 +30,9 @@ public class Api {
                Collection<String> consumes,
                Collection<String> produces,
                DelayContainer delay,
-               HashMap<String, String> resultHeaders,
                ResultValue resultValue,
                ScriptModel script) {
-        this(name, path, requestMethod, consumes, produces, delay, resultHeaders, resultValue, script, null);
+        this(name, path, requestMethod, consumes, produces, delay, resultValue, script, null);
     }
 
     public Api(String name,
@@ -43,7 +41,6 @@ public class Api {
                Collection<String> consumes,
                Collection<String> produces,
                DelayContainer delay,
-               HashMap<String, String> resultHeaders,
                ResultValue resultValue,
                ScriptModel script,
                AsyncApi asyncApi) {
@@ -54,7 +51,6 @@ public class Api {
         this.consumes = consumes;
         this.produces = produces;
         this.delay = delay;
-        this.resultHeaders = resultHeaders;
         this.resultValue = resultValue;
         this.script = script;
         this.asyncApi = asyncApi;
@@ -83,10 +79,6 @@ public class Api {
 
     public DelayContainer getDelay() {
         return delay;
-    }
-
-    public HashMap<String, String> getResultHeaders() {
-        return resultHeaders;
     }
 
     public ResultValue getResultValue() {

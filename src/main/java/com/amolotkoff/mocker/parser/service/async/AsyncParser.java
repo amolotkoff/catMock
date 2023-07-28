@@ -6,6 +6,7 @@ import com.amolotkoff.mocker.parser.model.ScriptModel;
 import com.amolotkoff.mocker.parser.model.api.AsyncApi;
 import com.amolotkoff.mocker.parser.model.context.MainContext;
 import com.amolotkoff.mocker.parser.model.params.Param;
+import com.amolotkoff.mocker.parser.model.result.AsyncResultValue;
 import com.amolotkoff.mocker.parser.service.*;
 import com.amolotkoff.mocker.parser.service.delay.DelayParser;
 import com.amolotkoff.mocker.util.DelayContainer;
@@ -49,18 +50,16 @@ public class AsyncParser {
         HttpStatus[] accepting = new AcceptStatusParser(asyncMap, parentPath).Parse();
         HashMap<String, String> resultHeaders = new HeadersParser(asyncMap, parentPath).Parse();
         MainContext mainContext = new ContextParser(asyncMap, parentPath).Parse();
-
+        AsyncResultValue resultValue = new AsyncResultParser(asyncMap, parentPath).Parse();
 
         return new AsyncApi(FileUtil.GetBaseFileName(path, true),
                             requestPath,
                             requestMethod,
                             produces,
-                            resultHeaders,
                             delayContainer,
                             script,
                             mainContext,
-                            params,
-                            responseBody,
+                            resultValue,
                             imports,
                             accepting);
     }

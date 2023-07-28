@@ -30,12 +30,14 @@ public class ResultParser {
         Object resultMap = Util.get(map, word.toString().toLowerCase());
 
         if (resultMap == null)
-            return new ResultValue("", HttpStatus.OK);
+            return new ResultValue("", HttpStatus.OK, new HashMap<>());
 
         HttpStatus status = new StatusParser(resultMap).Parse();
         String body = new BodyValueParser(resultMap, path).Parse();
         body = body.replace("\"","\\\"").replace("\'","\\\'"); //need?
 
-        return new ResultValue(body, status);
+        HashMap<String, String> headers = new HeadersParser(resultMap, path).Parse();
+
+        return new ResultValue(body, status, headers);
     }
 }

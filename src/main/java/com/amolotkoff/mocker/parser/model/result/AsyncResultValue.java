@@ -1,17 +1,18 @@
 package com.amolotkoff.mocker.parser.model.result;
 
+import com.amolotkoff.mocker.parser.model.params.Param;
 import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 
-public class ResultValue {
+public class AsyncResultValue {
     private String body;
-    private HttpStatus status;
+    private Param[] queryParams;
     private HashMap<String, String> headers;
 
-    public ResultValue(String body, HttpStatus status, HashMap<String, String> headers) {
+    public AsyncResultValue(String body, Param[] queryParams, HashMap<String, String> headers) {
         this.body = body;
-        this.status = status;
+        this.queryParams = queryParams;
         this.headers = headers;
     }
 
@@ -19,11 +20,12 @@ public class ResultValue {
         return body;
     }
 
-    public  HttpStatus getStatus() {
-        return status;
+    public Param[] getQueryParams() {
+        return queryParams;
     }
 
     public HashMap<String, String> getHeaders() {
         return headers;
     }
+
 }

@@ -56,9 +56,7 @@ public class APIsParser {
         if (path == null)
             throw new Exception("No found path");
 
-
         ScriptModel scriptModel = new ScriptParser(map).Parse();
-        HashMap<String, String> resultHeaders = new HeadersParser(map, path).Parse();
         ResultValue resultValue = new ResultParser(map, path, ResultParser.Word.RESULT).Parse();
         RequestMethod requestMethod = new RequestMethodParser(map).Parse();
         DelayContainer delay = new DelayParser(map).Parse();
@@ -72,7 +70,6 @@ public class APIsParser {
                        consumes,
                        produces,
                        delay,
-                       resultHeaders,
                        resultValue,
                        scriptModel,
                        asyncApi);

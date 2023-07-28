@@ -8,11 +8,11 @@ async:
     method: get
     path: 'http://localhost:8080/{id2}/mock/get?id={id2}'
     script: '' #some script executing every executing
-    headers:
-        myHeader: 'myHeaderValue'
-    query-params:
-        param1: 'value1'
-    body:
+    result:
+        headers:
+            myHeader: 'myHeaderValue'
+        query-params:
+            param1: 'value1'
         value: 'blabla'
     check:
         status: 200
