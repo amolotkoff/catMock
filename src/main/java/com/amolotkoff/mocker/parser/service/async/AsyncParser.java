@@ -4,11 +4,11 @@ import com.amolotkoff.mocker.file.FileUtil;
 import com.amolotkoff.mocker.parser.model.Import;
 import com.amolotkoff.mocker.parser.model.ScriptModel;
 import com.amolotkoff.mocker.parser.model.api.AsyncApi;
+import com.amolotkoff.mocker.parser.model.context.MainContext;
 import com.amolotkoff.mocker.parser.model.params.Param;
 import com.amolotkoff.mocker.parser.service.*;
 import com.amolotkoff.mocker.parser.service.delay.DelayParser;
 import com.amolotkoff.mocker.util.DelayContainer;
-import com.amolotkoff.mocker.util.IDelayFactory;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.http.HttpStatus;
@@ -44,10 +44,12 @@ public class AsyncParser {
         ScriptModel script = new ScriptParser(asyncMap).Parse();
         Import imports = new ImportParser(asyncMap).Parse();
         Collection<String> produces = new ProducerConsumerParser(asyncMap, ProducerConsumerParser.Type.PRODUCES).Parse();
-        Param[] params = new ParamsParser(asyncMap, parentPath).Parse();
+        Param[] params = new QueryParamsParser(asyncMap, parentPath).Parse();
         String responseBody = new BodyValueParser(asyncMap, parentPath).Parse();
         HttpStatus[] accepting = new AcceptStatusParser(asyncMap, parentPath).Parse();
-        HashMap<String, String> resultHeaders = new HeadersParser(asyncMap).Parse();
+        HashMap<String, String> resultHeaders = new HeadersParser(asyncMap, parentPath).Parse();
+        MainContext mainContext = new ContextParser(asyncMap, parentPath).Parse();
+
 
         return new AsyncApi(FileUtil.GetBaseFileName(path, true),
                             requestPath,
@@ -56,6 +58,7 @@ public class AsyncParser {
                             resultHeaders,
                             delayContainer,
                             script,
+                            mainContext,
                             params,
                             responseBody,
                             imports,

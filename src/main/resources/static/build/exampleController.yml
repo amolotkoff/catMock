@@ -1,21 +1,36 @@
 http:
-  script: "int i = 5;"
   context:
-    script: "String token = \"jwt-dsfbfdsbgfbfb54gb4v45g45g4\";"
+    script: 'String token = "jwt-dsfbfdsbgfbfb54gb4v45g45g4";'
     source:
       file: "/files/myXml.xml"
     ssltoken: "jwt-ssl-eve4rh34rh34vfu347f34f3bfv"
+  script: "int i = 5;"
   api:
-    api1:
-      delay:
-        type: base
-        value: 55 
+    api2:
       method: get
-      path: "/mock/id/{id}/get"
+      path: "/mock/get"
       produces: "application/json"
       #consumes: "application/json"
+      result:
+        status: 200
+        value: "${source}"
+      delay:
+        type: base
+        value: 55
+    api1:
+      method: get
+      path: "/mock/{id}/get"
+      async: 'async/exampleAsyncController.yml'
       headers:
         mySyperheader: 'superValue'
       result:
         status: 200
-        value: "${source}"
+        value:
+          file: '/files/myXml.xml'
+      delay:
+        type: percentile
+        min: 100
+        max: 200
+        percentile: 90
+        value: 55
+      script: 'int i = 5;'

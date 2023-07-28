@@ -7,6 +7,7 @@ import com.amolotkoff.mocker.parser.model.api.Api;
 import com.amolotkoff.mocker.parser.model.api.AsyncApi;
 import com.amolotkoff.mocker.parser.model.context.MainContext;
 import com.amolotkoff.mocker.parser.model.context.SubContext;
+import com.amolotkoff.mocker.parser.model.params.Param;
 import com.amolotkoff.mocker.parser.model.result.ResultValue;
 import com.amolotkoff.mocker.util.IDelayFactory;
 import io.netty.handler.codec.Headers;
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,9 +69,12 @@ public class HttpControllerModel {
         return String.format("%s.%s", CONTROLLER_PACKAGE, name);
     }
 
+    public MainContext getContext() {
+        return context;
+    }
+
     @Override
     public String toString() {
-
         StringBuilder packageBuilder = new StringBuilder();
         StringBuilder contextBuilder = new StringBuilder();
         StringBuilder constructorBuilder = new StringBuilder();
@@ -130,7 +135,7 @@ public class HttpControllerModel {
 
     private void headersContext(StringBuilder contextBuilder) {
         for(Api api : apis)
-            contextBuilder.append(String.format("\tprivate MultiValueMap<String, String> resultHeaders_%s = new LinkedMultiValueMap<>();\n", api.getName()));
+            contextBuilder.append(String.format("\tprivate MultiValueMap<String, String> responseHeaders_%s = new LinkedMultiValueMap<>();\n", api.getName()));
     }
 
     private void headersConstructor(StringBuilder constructorBuilder) {
@@ -138,18 +143,18 @@ public class HttpControllerModel {
 
         for(Api api : apis) {
             for (Map.Entry<String, String> header : api.getResultHeaders().entrySet())
-                constructorBuilder.append(String.format("\t\tthis.resultHeaders_%s.add(\"%s\", \"%s\");\n", api.getName(), header.getKey(), header.getValue()));
+                constructorBuilder.append(String.format("\t\tthis.responseHeaders_%s.add(\"%s\", \"%s\");\n", api.getName(), header.getKey(), header.getValue()));
         }
     }
 
     private void context(StringBuilder context) {
         for (SubContext subContext : this.context.getSubContexts()) {
             if (subContext.getType().getSimpleName().equals(String.class.getSimpleName())) //check if we deal with String type
-                context.append(String.format("\tprivate String %s = %s\n", subContext.getName(), formatString((String)subContext.getValue())));
+                context.append(String.format("\tprivate String %s;\n", subContext.getName()));
             else if (subContext.getType().getSimpleName().equals(Character.class.getSimpleName()))
-                context.append(String.format("\tprivate %s %s = \'%s\';\n", subContext.getType().getSimpleName(), subContext.getName(), subContext.getValue()));
+                context.append(String.format("\tprivate %s %s = \'\';\n", subContext.getType().getSimpleName(), subContext.getName()));
             else
-                context.append(String.format("\tprivate %s %s = %s;\n", subContext.getType().getSimpleName(), subContext.getName(), subContext.getValue()));
+                context.append(String.format("\tprivate %s %s;\n", subContext.getType().getSimpleName(), subContext.getName()));
         }
     }
 
@@ -241,8 +246,8 @@ public class HttpControllerModel {
             if(paramI > 0)
                 methodsBuilder.append(", ");
 
-            methodsBuilder.append(String.format("@RequestBody(required = false) String body, "));
-            methodsBuilder.append(String.format("@RequestHeader Map<String, String> headers, "));
+            methodsBuilder.append(String.format("@RequestBody(required = false) String requestBody, "));
+            methodsBuilder.append(String.format("@RequestHeader Map<String, String> requestHeaders, "));
             methodsBuilder.append(String.format("HttpServletRequest request"));
 
             methodsBuilder.append(") {\n"); // end of method declaration
@@ -256,9 +261,9 @@ public class HttpControllerModel {
                 methodsBuilder.append("\t\t\tfinal Context context = contextService.getContext();\n");
 
             //body of method
-            methodsBuilder.append("\t\t\tfinal String path = request.getRequestURI();\n");
-            methodsBuilder.append("\t\t\tString response = \"\";\n");
-            methodsBuilder.append("\t\t\tHttpStatus status;\n\n");
+            methodsBuilder.append("\t\t\tfinal String requestPath = request.getRequestURI();\n");
+            methodsBuilder.append("\t\t\tString responseBody = \"\";\n");
+            methodsBuilder.append("\t\t\tHttpStatus responseStatus;\n\n");
 
             //script of body method
 
@@ -280,18 +285,17 @@ public class HttpControllerModel {
                 methodsBuilder.append(String.format("\t\t\tcontext.put(\"%s\", %s);\n", ctx.getName(), ctx.getName()));
             }
 
+            methodsBuilder.append(String.format("\t\t\tresponseBody = \"%s\";\n", responseBody));
+            methodsBuilder.append(String.format("\t\t\tresponseStatus = HttpStatus.%s;\n", resultStatus));
+            methodsBuilder.append(String.format("\t\t\tresponseBody = context.substitude(responseBody);\n"));
+
             ScriptModel apiScript = api.getScript();
             methodsBuilder.append(String.format("\t\t\t%s\n", apiScript.getCode()));
-
-
-            methodsBuilder.append(String.format("\t\t\tresponse = \"%s\";\n", responseBody));
-            methodsBuilder.append(String.format("\t\t\tstatus = HttpStatus.%s;\n", resultStatus));
-            methodsBuilder.append(String.format("\t\t\tresponse = context.substitude(response);\n"));
 
             //check on async
             freeContextWhenNoAsync(api, methodsBuilder);
 
-            methodsBuilder.append(String.format("\t\t\treturn Mono.just(new ResponseEntity<String>(response, resultHeaders_%s , status));\n\t\t})", api.getName()));
+            methodsBuilder.append(String.format("\t\t\treturn Mono.just(new ResponseEntity<String>(responseBody, responseHeaders_%s , responseStatus));\n\t\t})", api.getName()));
             methodsBuilder.append(String.format(".delaySubscription(Duration.ofMillis(delay_%s.get()))", api.getName()));
             asyncTailAppend(api, methodsBuilder);
 
@@ -312,36 +316,71 @@ public class HttpControllerModel {
         if (asyncApi == null)
             methodsBuilder.append(";\n"); // end of Mono method, need ;
         else {
-            methodsBuilder.append("\n\t\t  .doOnSuccess(c -> {\n");
+            methodsBuilder.append("\n\t\t.doOnSuccess(c -> {\n");
             //methodsBuilder.append(String.format("\t\t\tlogger.info(\"async %s\");\n", api.getAsyncApi().getName())); //log info
 
-            if(needsBody(asyncApi)) {
-                methodsBuilder.append(String.format("\t\t\tString body = \"%s\";\n", asyncApi.getBody()));
+            //async api contexts
+            MainContext asyncApiContext = asyncApi.getContext();
+
+            for(SubContext subContext : asyncApiContext.getSubContexts()) {
+                String contextValue = "%s";
+
+                if (subContext.getType().equals(String.class))
+                    contextValue = "\"" + contextValue + "\"";
+
+                contextValue = String.format(contextValue, subContext.getValue());
+                methodsBuilder.append(String.format("\t\t\t%s %s = %s;\n", subContext.getType().getSimpleName(), subContext.getName(), contextValue.toString()));
             }
 
-            methodsBuilder.append(String.format("\t\t\tString path=\"%s\";\n", asyncApi.getPath()));
+            methodsBuilder.append(String.format("\t\t\t%s\n", asyncApiContext.getCode()));
+
+            //async api query-params
+
+            for(Param queryParam : asyncApi.getParams())
+                methodsBuilder.append(String.format("\t\t\tString %s = \"%s\";\n", queryParam.getName(), queryParam.getValue()));
+
+            if(needsBody(asyncApi)) {
+                methodsBuilder.append(String.format("\t\t\tString requestBody = \"%s\";\n", asyncApi.getBody()));
+            }
+
+            //TODO:
+            // async: add headers
+
+            methodsBuilder.append(String.format("\t\t\tString requestPath=\"%s\";\n", asyncApi.getPath()));
             //methodsBuilder.append(String.format("\t\t")); set headers!
 
             methodsBuilder.append(String.format("\t\t%s", asyncApi.getScript().getCode()));
 
             //substitution
             if(needsBody(asyncApi)) {
-                methodsBuilder.append(String.format("\t\tbody = context.substitude(body);\n"));
+                methodsBuilder.append(String.format("\t\trequestBody = context.substitude(requestBody);\n"));
             }
 
 
             methodsBuilder.append(String.format("\tDisposable clientRequest = this.asyncWebClient_%s.%s()\n", asyncApi.getName(),
                                                 asyncApi.getRequestMethod().toString().toLowerCase()));
 
+            //async request path builder: path and query params
+            StringBuilder pathParamsAppendBuilder = new StringBuilder();
 
-            methodsBuilder.append(String.format("\t\t\t\t\t\t\t.uri(path)\n"));
+            Pattern pathPattern = Pattern.compile("\\{\\w+\\}");
+            Matcher matcher = pathPattern.matcher(asyncApi.getPath());
+
+            while(matcher.find()) {
+                String substituteParam = matcher.group().substring(1, matcher.group().length() - 1);
+                pathParamsAppendBuilder.append(", " + substituteParam);
+            }
+
+            methodsBuilder.append(String.format("\t\t\t\t\t\t\t.uri(requestPath%s)\n", pathParamsAppendBuilder));
 
             //headers
+            //TODO:
+            // add custom header or header substitution
             for(Map.Entry<String, String> header : api.getAsyncApi().getResultHeaders().entrySet())
                 methodsBuilder.append(String.format("\t\t\t\t\t\t\t.header(\"%s\", \"%s\")\n", header.getKey(), header.getValue()));
 
             if(needsBody(asyncApi)) {
-                methodsBuilder.append(String.format("\t\t\t\t\t\t\t.bodyValue(body)\n"));
+                methodsBuilder.append(String.format("\t\t\t\t\t\t\t.bodyValue(requestBody)\n"));
             }
 
             methodsBuilder.append(String.format("\t\t\t\t\t\t\t.exchange()\n"));
@@ -388,7 +427,8 @@ public class HttpControllerModel {
             methodsBuilder.append(String.format("\t\t\t\t\t\t\t\t\t\tbreak;\n"));
             methodsBuilder.append(String.format("\t\t\t\t\t\t\t\t\tdefault:\n"));
 
-            //all handlers are hear
+            // TODO:
+            //  add error handlers hear
 
             methodsBuilder.append(String.format("\t\t\t\t\t\t\t\t\t\tbreak;\n"));
             methodsBuilder.append(String.format("\t\t\t\t\t\t\t\t}\n"));
