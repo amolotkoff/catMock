@@ -44,8 +44,8 @@ http:
       produces: "application/json" # Content-Type
       consumes: "application/json" # Content-Type
       result:
-	status: 200
-        value: "${source}" # так происходит подстановка значения по указанному имени (может содержаться и в файлике) 
+	 status: 200
+         value: "${source}" # так происходит подстановка значения по указанному имени (может содержаться и в файлике) 
       delay:
         type: base
         value: 55
