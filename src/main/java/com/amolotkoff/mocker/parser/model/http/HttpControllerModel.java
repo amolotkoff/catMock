@@ -291,7 +291,6 @@ public class HttpControllerModel {
 
             ScriptModel apiScript = api.getScript();
             methodsBuilder.append(String.format("\t\t\t%s\n", apiScript.getCode()));
-
             //check on async
             freeContextWhenNoAsync(api, methodsBuilder);
 
