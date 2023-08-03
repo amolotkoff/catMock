@@ -5,7 +5,7 @@ import com.amolotkoff.mocker.parser.model.api.Api;
 import com.amolotkoff.mocker.parser.model.http.HttpControllerModel;
 import com.amolotkoff.mocker.register.*;
 import com.amolotkoff.mocker.util.*;
-import com.amolotkoff.mocker.util.controller.ApiController;
+import com.amolotkoff.mocker.controllers.ApiController;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;

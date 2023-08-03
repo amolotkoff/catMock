@@ -1,11 +1,10 @@
-package com.amolotkoff.mocker.util.controller;
+package com.amolotkoff.mocker.controllers;
 
 import com.amolotkoff.mocker.parser.model.api.Api;
 import com.amolotkoff.mocker.util.DelayKey;
 import org.springframework.http.MediaType;
 import org.springframework.http.*;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -76,20 +75,10 @@ public class ApiController
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HashMap<String, Object> fetchApis() {
-        HashMap<String, Object> fetched = new HashMap<String, Object>();
-
-        for(String parent : apis.keySet()) {
-            List<Object> fetchedApis = new ArrayList<>();
-
-            fetched.put(parent, fetchedApis);
-
-            for (Api api : this.apis.get(parent)) {
-                fetchedApis.add(generateApi(api));
-            }
-        }
-
-        return fetched;
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public HashMap<String, List<Api>> fetchApis() {
+        return apis;
     }
 
     private HashMap<String, Object> generateApi(Api api) {

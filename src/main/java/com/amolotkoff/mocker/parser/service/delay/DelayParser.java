@@ -32,10 +32,10 @@ public class DelayParser {
                 int percentile = Util.get(delay, "percentile");
                 int value = Util.get(delay, "value");
 
-                DelayKey percentileMinKey = new DelayKey(DelayViewType.Slider, percentileMin);
-                DelayKey percentileMaxKey = new DelayKey(DelayViewType.Number, percentileMax);
-                DelayKey percentileKey = new DelayKey(DelayViewType.Slider, percentile);
-                DelayKey valueKey = new DelayKey(DelayViewType.Slider, value);
+                DelayKey percentileMinKey = new DelayKey(percentileMin);
+                DelayKey percentileMaxKey = new DelayKey(percentileMax);
+                DelayKey percentileKey = new DelayKey(percentile);
+                DelayKey valueKey = new DelayKey(value);
 
                 HashMap<String, DelayKey> keys = new HashMap<>();
 
@@ -54,7 +54,7 @@ public class DelayParser {
             }
             case "base": {
                 int value = Util.get(delay, "value");
-                DelayKey valueKey = new DelayKey(DelayViewType.Slider, value);
+                DelayKey valueKey = new DelayKey(value);
 
                 HashMap<String, DelayKey> keys = new HashMap<>();
                 keys.put("value", valueKey);
