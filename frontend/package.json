@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "axios": "1.4.0",
+    "classnames": "^2.3.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-scripts": "2.1.1",
-    "axios": "1.4.0"
+    "react-scripts": "2.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -18,9 +19,13 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "http://localhost:8080/",
   "options": {
-    "allowedHosts": ["localhost", ".localhost"],
-    "proxy": "https://localhost:3030/"
+    "allowedHosts": [
+      "localhost",
+      ".localhost"
+    ],
+    "proxy": "https://localhost:8080/"
   },
   "browserslist": [
     ">0.2%",
