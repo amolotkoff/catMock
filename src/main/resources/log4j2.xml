@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="debug">
+<Configuration>
+    <Properties>
+        <property name="filePattern">${date:yyyy-MM-dd-HH_mm_ss}</property>
+    </Properties>
     <Appenders>
         <Console name="Console-Appender" target="SYSTEM_OUT">
             <PatternLayout>
@@ -8,7 +11,7 @@
                 </pattern>>
             </PatternLayout>
         </Console>
-        <File name="File-Appender" fileName="logs/xmlfilelog.log" >
+        <File name="File-Appender" fileName="logs/${filePattern}.log" append="false">
             <PatternLayout>
                 <pattern>
                     [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
@@ -17,7 +20,7 @@
         </File>
     </Appenders>
     <Loggers>
-        <Root level="debug">
+        <Root>
             <AppenderRef ref="File-Appender"/>
         </Root>
     </Loggers>

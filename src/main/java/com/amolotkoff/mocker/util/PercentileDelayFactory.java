@@ -1,5 +1,9 @@
 package com.amolotkoff.mocker.util;
 
+import com.amolotkoff.mocker.serializers.PercentileDelayFactorySerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonSerialize(using = PercentileDelayFactorySerializer.class)
 public class PercentileDelayFactory implements IDelayFactory {
 
     private final DelayKey percentile, percentileMin, percentileMax, delay;
