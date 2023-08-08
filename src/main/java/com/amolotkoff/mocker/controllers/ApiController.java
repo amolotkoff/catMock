@@ -32,7 +32,7 @@ public class ApiController
         return null;
     }
 
-    @PostMapping(value = "/id/{parent}/{name}")
+    @PostMapping(value = "/id/{parent}/{name}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void updateApi(@PathVariable String parent, @PathVariable String name, @RequestBody HashMap<String, Long> model) {
         Api api = null;
@@ -52,7 +52,7 @@ public class ApiController
         }
     }
 
-    @GetMapping(value = "/id/{parent}/{name}/startup", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/id/{parent}/{name}/startup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public HashMap<String, Long> startupApi(@PathVariable String parent, @PathVariable String name) {
         HashMap<String, Long> startup = new HashMap<>();

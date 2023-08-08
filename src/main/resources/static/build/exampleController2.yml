@@ -1,0 +1,19 @@
+http:
+  context:
+    script: 'String token = "jwt-dsfbfdsbgfbfb54gb4v45g45g4";'
+    source:
+      file: "/files/myXml.xml"
+    ssltoken: "jwt-ssl-eve4rh34rh34vfu347f34f3bfv"
+  script: "int i = 5;"
+  api:
+    api2:
+      method: get
+      path: "/mock/get/aaa"
+      produces: "application/json"
+      #consumes: "application/json"
+      result:
+        status: 200
+        value: "${source}"
+      delay:
+        type: base
+        value: 55
