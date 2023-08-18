@@ -3,6 +3,7 @@ import Navigation from "./Navigation";
 import axios from "axios";
 import HomePage from "./HomePage";
 import DelayPage from "./DelayPage";
+import BuildPage from "./BuildPage";
 
 export default function BarNavigation({onCallback}) {
     const home = {
@@ -15,5 +16,10 @@ export default function BarNavigation({onCallback}) {
         onClick: () => onCallback(<DelayPage />)
     }
 
-    return (<Navigation bars={[home , delay ]} />);
+    const build = {
+        icon: 'fa fa-cog',
+        onClick: () => onCallback(<BuildPage />)
+    }
+
+    return (<Navigation bars={[home , delay , build ]} />);
 }

@@ -4,7 +4,8 @@ import {generatePath} from "react-router"
 import LoadingPage from "./LoadingPage";
 import "../assets/css/w3.css"
 
-export default function DelayPage() {
+
+export default function BuildPage() {
     const [fetched, setFetched] = useState()
 
     useEffect(() => {
@@ -27,31 +28,10 @@ export default function DelayPage() {
                                                 let name = api["name"]
                                                 let path = api["path"]
                                                 let requestMethod = api["requestMethod"]
+                                                let consumes = api["consumes"]
+                                                let produces = api["produces"]
                                                 let delayType = api["delay"]["factory"]["type"]
-                                                let delayKeys = api["delay"]["keys"] // array
                                                 const inputClassName = `${controllerName}-${name}`
-
-                                                const sendDelay = () => {
-                                                    let delay = {}
-                                                    for(let input of Array.from(document.getElementsByClassName(inputClassName)))
-                                                        delay[input.name] = Number(input.value)
-                                                    
-                                                    fetch(generatePath("/mock/api/id/:parent/:name", { parent : controllerName, name : name })  , { 
-                                                            method: "POST", 
-                                                            body: JSON.stringify(delay), 
-                                                            headers: { 'Content-Type': 'application/json' }
-                                                        });
-                                                }
-
-                                                const sendStartup = () => {                      
-                                                    for(let input of Array.from(document.getElementsByClassName(inputClassName)))
-                                                        input.value = delayKeys[input.name]["startValue"]
-
-                                                    fetch(generatePath("/mock/api/id/:parent/:name/startup", { parent : controllerName, name : name }), {
-                                                        method: "GET",
-                                                        headers: { 'Content-Type': 'application/json' }
-                                                    })
-                                                }
 
                                                 return (<tr>
                                                             <td style={{width: "10%"}}>{name}</td>
