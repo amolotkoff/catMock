@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, useId, useRef } from "react";
 import Collapsible from "./Collapsible"
 import {generatePath} from "react-router"
+import LoadingPage from "./LoadingPage";
 import "../assets/css/w3.css"
 
 export default function DelayPage() {
@@ -15,7 +16,7 @@ export default function DelayPage() {
     }, []);
 
     if (fetched == undefined)
-        return <p>loading</p> // TODO: add loading page
+        return <LoadingPage /> // TODO: add loading page
 
     return (<div className="w3-container">
                 {Object.keys(fetched).map((controllerName) => {
