@@ -1,4 +1,4 @@
-package com.amolotkoff.jr.methods;
+package com.amolotkoff.jr.fields;
 
 import com.amolotkoff.jr.IJR;
 import lombok.*;
@@ -8,17 +8,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JRMethods implements IJR {
+public class JRFields implements IJR {
 
     @Getter
-    private List<JRMethod> methods;
+    private List<JRField> fields;
 
     @Override
     public String toCode() {
         StringBuilder container = new StringBuilder();
 
-        for(JRMethod method : methods)
-            container.append(String.format("%s\n", method.toCode()));
+        for(JRField field : fields)
+            container.append(String.format("private %s;\n", field.toCode()));
 
         return container.toString();
     }

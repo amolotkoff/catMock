@@ -1,5 +1,6 @@
-package com.amolotkoff.jr.methods.attributes;
+package com.amolotkoff.jr.attributes;
 
+import com.amolotkoff.jr.IJR;
 import lombok.*;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class JRAttribute {
+public class JRAttribute implements IJR {
 
     @Getter
     @Setter
@@ -17,7 +18,7 @@ public class JRAttribute {
     private List<JRAttributeField> fields;
 
     @Override
-    public String toString() {
+    public String toCode() {
         StringBuilder container = new StringBuilder("@" + name);
 
         if (fields.size() > 0) {
@@ -29,7 +30,7 @@ public class JRAttribute {
                 if (i > 0)
                     container.append(", ");
 
-                container.append(String.format("%s = %s", field.getName(), field.getValue()));
+                container.append(field.toCode());
             }
 
             container.append(")");
