@@ -182,7 +182,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.amolotkoff.mocker.Application</mainClass>
+							<mainClass>com.amolotkoff.Application</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

@@ -1,7 +1,7 @@
 package com.amolotkoff.mocker.file;
 
-import com.amolotkoff.mocker.parser.model.http.HttpControllerModel;
-import com.amolotkoff.mocker.parser.service.*;
+import com.amolotkoff.parser.model.http.HttpControllerModel;
+import com.amolotkoff.parser.service.*;
 import com.amolotkoff.mocker.reflect.ControllerReflectBuilder;
 import com.amolotkoff.mocker.register.*;
 import org.apache.logging.log4j.Logger;

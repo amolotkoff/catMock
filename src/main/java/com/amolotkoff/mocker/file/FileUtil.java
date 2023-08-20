@@ -1,6 +1,6 @@
 package com.amolotkoff.mocker.file;
 
-import com.amolotkoff.mocker.Application;
+import com.amolotkoff.Application;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public class FileUtil {
