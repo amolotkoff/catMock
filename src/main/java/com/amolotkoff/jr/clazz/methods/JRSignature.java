@@ -1,4 +1,4 @@
-package com.amolotkoff.jr.methods;
+package com.amolotkoff.jr.clazz.methods;
 
 import com.amolotkoff.jr.IJR;
 import lombok.*;
@@ -6,6 +6,7 @@ import lombok.*;
 import java.util.List;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class JRSignature implements IJR {
 

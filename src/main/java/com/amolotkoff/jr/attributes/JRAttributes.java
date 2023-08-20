@@ -18,8 +18,8 @@ public class JRAttributes implements IJR {
         StringBuilder container = new StringBuilder();
 
         for (JRAttribute attribute : values)
-            container.append(String.format("") attribute.toCode());
+            container.append(String.format("%s\n", attribute.toCode()));
 
-        return null;
+        return container.toString();
     }
 }

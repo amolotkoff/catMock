@@ -1,9 +1,8 @@
 package com.amolotkoff.jr;
 
+import com.amolotkoff.jr.clazz.JRClass;
 import lombok.*;
 import com.amolotkoff.util.PathBuilder;
-
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,8 +13,18 @@ public class JRFile implements IJR {
     private PathBuilder path;
 
     @Getter
-    private List<String> imports;
+    private JRImports imports;
 
     @Getter
     private JRClass clazz;
+
+    @Override
+    public String toCode() {
+        StringBuilder container = new StringBuilder();
+
+        container.append(imports.toCode());
+        container.append(clazz.toCode());
+
+        return container.toString();
+    }
 }

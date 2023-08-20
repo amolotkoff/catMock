@@ -1,4 +1,4 @@
-package com.amolotkoff.jr.fields;
+package com.amolotkoff.jr.clazz.fields;
 
 import com.amolotkoff.jr.IJR;
 import lombok.*;

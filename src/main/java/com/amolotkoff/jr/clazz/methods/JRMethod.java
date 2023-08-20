@@ -1,4 +1,4 @@
-package com.amolotkoff.jr.methods;
+package com.amolotkoff.jr.clazz.methods;
 
 import com.amolotkoff.jr.attributes.*;
 import com.amolotkoff.jr.IJR;
