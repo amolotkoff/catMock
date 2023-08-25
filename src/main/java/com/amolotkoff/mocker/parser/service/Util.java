@@ -12,12 +12,12 @@ public class Util {
 
     public static <T> T get(Object map, String key, boolean required, T defaultValue) throws KeyNotFoundException, ClassCastException  {
         if (!(map instanceof HashMap))
-            throw new ClassCastException();
+            throw new ClassCastException("Object is not an instance of HashMap");
 
         boolean containsKey = ((HashMap<String, Object>) map).containsKey(key);
 
         if (!containsKey && required)
-            throw new KeyNotFoundException();
+            throw new KeyNotFoundException(String.format("Key (%s) not found in map:%s", key, map));
 
         if (containsKey)
             return (T)((HashMap<String, Object>) map).get(key);
