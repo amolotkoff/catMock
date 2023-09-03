@@ -7,8 +7,8 @@
         </Console>
 
         <RollingFile name="RollingFile"
-                     fileName="./logs/spring-boot-logger-log4j2.log"
-                     filePattern="./logs/$${date:yyyy-MM}/spring-boot-logger-log4j2-%d{-dd-MMMM-yyyy}-%i.log.gz">
+                     fileName="./logs/aaa.log"
+                     filePattern="./logs/$${date:yyyy-MM}/%d{HH}-%i.log">
             <PatternLayout>
                 <pattern>%d %p %C{1.} [%t] %m%n</pattern>
             </PatternLayout>
@@ -17,12 +17,11 @@
                     10 MegaBytes -->
                 <OnStartupTriggeringPolicy />
                 <SizeBasedTriggeringPolicy
-                        size="10 MB" />
+                        size="100 MB" />
                 <TimeBasedTriggeringPolicy />
             </Policies>
         </RollingFile>
     </Appenders>
-
     <Loggers>
         <!-- LOG everything at INFO level -->
         <Root level="info">
@@ -33,5 +32,4 @@
         <!-- LOG "com.baeldung*" at TRACE level -->
         <Logger name="com.baeldung" level="trace"></Logger>
     </Loggers>
-
 </Configuration>

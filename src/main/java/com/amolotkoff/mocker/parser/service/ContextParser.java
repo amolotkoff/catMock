@@ -3,9 +3,7 @@ package com.amolotkoff.mocker.parser.service;
 import com.amolotkoff.mocker.file.FileUtil;
 import com.amolotkoff.mocker.parser.model.context.MainContext;
 import com.amolotkoff.mocker.parser.model.context.SubContext;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,19 +12,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class ContextParser {
-    private final Logger logger;
+
     private final Object map;
     private final String path;
 
     public ContextParser(Object map, String path) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
         this.path = path;
     }
 
     public MainContext Parse() throws Exception {
-        logger.info("\tparse context...");
+        log.info("\tparse context...");
 
         HashMap<String, Object> mainContext = Util.<HashMap<String, Object>>get(map, "context", false, null);
 
@@ -59,7 +57,7 @@ public class ContextParser {
         SubContext[] asArray = new SubContext[models.size()];
         asArray = models.toArray(asArray);
 
-        logger.info("\tsuccess...");
+        log.info("\tsuccess...");
 
         return new MainContext(asArray, code);
     }

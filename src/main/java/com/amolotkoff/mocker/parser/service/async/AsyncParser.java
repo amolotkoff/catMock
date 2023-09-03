@@ -10,28 +10,29 @@ import com.amolotkoff.mocker.parser.model.result.AsyncResultValue;
 import com.amolotkoff.mocker.parser.service.*;
 import com.amolotkoff.mocker.parser.service.delay.DelayParser;
 import com.amolotkoff.mocker.util.DelayContainer;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
+import lombok.*;
 
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 
+@Slf4j
 public class AsyncParser {
-    private final Logger logger;
     private final Object map;
     private final String path;
 
     public AsyncParser(Object map, String path) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
         this.path = path;
     }
 
     public AsyncApi Parse() throws Exception {
-        logger.info("\tparsing async...");
+        log.info("\tparsing async...");
 
         if (!Util.has(map, "async"))
             return null;

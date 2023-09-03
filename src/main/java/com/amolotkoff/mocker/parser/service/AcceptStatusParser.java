@@ -1,20 +1,21 @@
 package com.amolotkoff.mocker.parser.service;
 
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.http.HttpStatus;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class AcceptStatusParser {
+
     private final HttpStatus[] DEFAULT_STATUSES = new HttpStatus[] { HttpStatus.OK, HttpStatus.ACCEPTED, HttpStatus.CREATED };
-    private final Logger logger;
     private final Object map;
     private final String path;
 
     public AcceptStatusParser(Object map, String path) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
         this.path = path;
     }

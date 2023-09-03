@@ -5,26 +5,26 @@ import com.amolotkoff.mocker.parser.exceptions.NotMapException;
 import com.amolotkoff.mocker.parser.model.http.HttpControllerModel;
 import com.amolotkoff.mocker.parser.service.async.AsyncParser;
 import com.amolotkoff.mocker.parser.service.async.AsyncProxyParser;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.UUID;
 
 import java.nio.file.Paths;
 import java.util.HashMap;
 
+@Slf4j
 public class HTTPParser {
-    private final Logger logger;
+
     private final Object map;
     private final String path;
 
     public HTTPParser(Object map, String path) {
-        this.logger = LogManager.getLogger();
         this.map = map;
         this.path = path;
     }
 
     public HttpControllerModel Parse() throws Exception {
-        logger.info("\tparse http...");
+        log.info("\tparse http...");
 
         if (!Util.isMap(map))
             throw new NotMapException();

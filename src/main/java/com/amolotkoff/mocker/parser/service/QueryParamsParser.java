@@ -2,8 +2,7 @@ package com.amolotkoff.mocker.parser.service;
 
 import com.amolotkoff.mocker.file.FileUtil;
 import com.amolotkoff.mocker.parser.model.params.Param;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -11,13 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class QueryParamsParser {
-    private final Logger logger;
     private final Object map;
     private final String path;
 
     public QueryParamsParser(Object map, String path) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
         this.path = path;
     }

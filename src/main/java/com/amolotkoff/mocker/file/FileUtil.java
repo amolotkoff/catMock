@@ -1,6 +1,7 @@
 package com.amolotkoff.mocker.file;
 
 import com.amolotkoff.mocker.Application;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -14,11 +15,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.stream.Stream;
+import lombok.*;
 
+@Slf4j
 public class FileUtil {
     public static final File HOME_DIRECTORY = new ApplicationHome(Application.class).getDir();
-
-    private static final Logger logger = LogManager.getRootLogger();
 
     public static String Load(Path path) {
         try {
@@ -41,10 +42,10 @@ public class FileUtil {
             return sb.toString();
         }
         catch (FileNotFoundException e) {
-            logger.error(String.format("file at path:%s not found!", path));
+            log.error(String.format("file at path:%s not found!", path));
         }
         catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
 
         return "";

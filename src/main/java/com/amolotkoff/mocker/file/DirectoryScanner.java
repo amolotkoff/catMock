@@ -4,14 +4,14 @@ import com.amolotkoff.mocker.parser.model.http.HttpControllerModel;
 import com.amolotkoff.mocker.parser.service.*;
 import com.amolotkoff.mocker.reflect.ControllerReflectBuilder;
 import com.amolotkoff.mocker.register.*;
-import org.apache.logging.log4j.Logger;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 import org.springframework.core.io.support.*;
-import org.slf4j.*;
 import org.springframework.core.io.Resource;
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
+@Slf4j
 public class DirectoryScanner {
     @Autowired
     private ControllerReflectBuilder builder;
@@ -30,11 +31,10 @@ public class DirectoryScanner {
     @Autowired
     private ResourcePatternResolver resourceResolver;
 
-    private org.slf4j.Logger logger = LoggerFactory.getLogger(DirectoryScanner.class);
-
     @PostConstruct
     public void scan() throws Exception {
-        logger.info("Start parse configurations..");
+        log.info("Start parse configurations..");
+
         Path p = Paths.get(FileUtil.HOME_DIRECTORY.getPath(), "build");
 
         if (Files.exists(p)) {
@@ -48,7 +48,7 @@ public class DirectoryScanner {
             }
         }
         else {
-            logger.warn("No found directory: build, so i download classes in resources");
+            log.info("No found directory: build, so i download classes in resources");
             Resource[] resouces = ResourcePatternUtils.getResourcePatternResolver(resourceResolver).getResources("classpath:/static/build/*.yml");
             for (Resource resource : resouces) {
                 File file = resource.getFile();
@@ -58,7 +58,7 @@ public class DirectoryScanner {
     }
 
     private void read(Path path) {
-        logger.info(String.format("\t%s", path));
+        log.info(String.format("\t%s", path));
 
         try {
             String yml = new String(Files.readAllBytes(path));

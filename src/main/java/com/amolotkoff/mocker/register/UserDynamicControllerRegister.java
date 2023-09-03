@@ -1,11 +1,13 @@
 package com.amolotkoff.mocker.register;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 @Component
+@Slf4j
 public class UserDynamicControllerRegister {
 
     @Autowired
@@ -16,21 +18,27 @@ public class UserDynamicControllerRegister {
     }
 
     public void registerUserController(RegisterModel model) throws Exception {
-
         /*
-        RequestMappingInfo.BuilderConfiguration options = new RequestMappingInfo.BuilderConfiguration();
-        options.setPathMatcher(new PathMa);
-        options.setPatternParser(new PathPatternParser());
+            RequestMappingInfo.BuilderConfiguration options = new RequestMappingInfo.BuilderConfiguration();
+            options.setPathMatcher(new PathMa);
+            options.setPatternParser(new PathPatternParser());
         */
 
-        System.out.println("MAPPING " + model);
+        log.info("mapping: %s\n with apis:", model.controller.getClass().getSimpleName());
+
         for (RegisterMappingModel api : model.mappings) {
+            log.info("http: %s, %s\nconsumes Content-Type:%s\nproduces Content-Type:%s",
+                     api.requestMethod,
+                     api.path,
+                     api.consumes,
+                     api.produces);
+
             handlerMapping.registerMapping(
                     RequestMappingInfo.paths(api.path)
-                            .methods(api.requestMethod)
-                            .consumes(api.consumes)
-                            .produces(api.produces)
-                            .build(),
+                                      .methods(api.requestMethod)
+                                      .consumes(api.consumes)
+                                      .produces(api.produces)
+                                      .build(),
                     model.controller,
                     api.method);
         }

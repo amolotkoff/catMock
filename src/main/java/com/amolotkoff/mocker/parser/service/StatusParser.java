@@ -1,22 +1,20 @@
 package com.amolotkoff.mocker.parser.service;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 
+@Slf4j
 public class StatusParser {
-    private final Logger logger;
     private final Object map;
 
     public StatusParser(Object map) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
     }
 
     public HttpStatus Parse() throws Exception {
-        logger.info("\tparse status...");
+        log.info("\tparse status...");
 
         try {
             Integer index = Util.get(map, "status");
@@ -25,6 +23,5 @@ public class StatusParser {
         catch (Exception e) {
             throw e;
         }
-
     }
 }

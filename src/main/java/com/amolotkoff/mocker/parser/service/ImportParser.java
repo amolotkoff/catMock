@@ -1,20 +1,18 @@
 package com.amolotkoff.mocker.parser.service;
 
 import com.amolotkoff.mocker.parser.model.Import;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ImportParser {
-    private final Logger logger;
     private final Object map;
 
     public ImportParser(Object map) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
     }
 
     public Import Parse() throws Exception {
-        logger.info("\tparse imports...");
+        log.info("\tparse imports...");
 
         if (!Util.has(map, "import"))
             return new Import();

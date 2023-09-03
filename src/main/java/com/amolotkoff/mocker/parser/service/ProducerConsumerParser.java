@@ -1,24 +1,22 @@
 package com.amolotkoff.mocker.parser.service;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+@Slf4j
 public class ProducerConsumerParser {
     public enum Type {
         PRODUCES,
         CONSUMES
     }
 
-    private final Logger logger;
     private final Object map;
     private final Type type;
 
     public ProducerConsumerParser(Object map, Type type) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
         this.type = type;
     }

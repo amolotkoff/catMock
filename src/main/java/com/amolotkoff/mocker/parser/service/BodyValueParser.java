@@ -2,19 +2,17 @@ package com.amolotkoff.mocker.parser.service;
 
 import com.amolotkoff.mocker.file.FileUtil;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class BodyValueParser {
-    private final Logger logger;
+
     private final Object map;
     private final String path;
 
     public BodyValueParser(Object map, String path) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
         this.path = path;
     }

@@ -2,17 +2,17 @@ package com.amolotkoff.mocker.parser.service.delay;
 
 import com.amolotkoff.mocker.parser.service.Util;
 import com.amolotkoff.mocker.util.*;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 
+@Slf4j
 public class DelayParser {
-    private final Logger logger;
+
     private Object map;
 
     public DelayParser(Object map) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
     }
 

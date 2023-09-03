@@ -7,8 +7,7 @@ import com.amolotkoff.mocker.parser.model.http.HttpControllerModel;
 import com.amolotkoff.mocker.register.*;
 import com.amolotkoff.mocker.util.*;
 import com.amolotkoff.mocker.controllers.ApiController;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,13 +25,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
+@Slf4j
 public class ControllerReflectBuilder {
     @Autowired
     private ContextService contextService;
     @Autowired
     private ApiController delayController;
-
-    private final Logger logger;
 
     private final JavaCompiler compiler;
     private final DiagnosticCollector<JavaFileObject> diagnostics;
@@ -44,7 +42,6 @@ public class ControllerReflectBuilder {
         this.compiler = ToolProvider.getSystemJavaCompiler();
         this.diagnostics = new DiagnosticCollector<>();
         this.manager = new InMemoryFileManager(compiler.getStandardFileManager(null, null, null));
-        this.logger = LogManager.getRootLogger();
         this.options = exportLibs();
     }
 
@@ -60,7 +57,7 @@ public class ControllerReflectBuilder {
         StringBuilder libs = new StringBuilder();
         libs.append(".");
 
-        logger.info("load libs from /lib folder...");
+        log.info("load libs from /lib folder...");
 
         //import external libs
         FileUtil.parseDirectory(Paths.get(FileUtil.HOME_DIRECTORY.toPath().toString(), "lib"), ".jar")
@@ -90,7 +87,7 @@ public class ControllerReflectBuilder {
         if (!result) {
             diagnostics.getDiagnostics()
                     .forEach(d -> {
-                        logger.info(String.valueOf(d));
+                        log.info(String.valueOf(d));
                     });
         } else {
 

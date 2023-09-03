@@ -7,27 +7,26 @@ import com.amolotkoff.mocker.parser.model.api.AsyncApi;
 import com.amolotkoff.mocker.parser.service.async.AsyncProxyParser;
 import com.amolotkoff.mocker.parser.service.delay.DelayParser;
 import com.amolotkoff.mocker.util.DelayContainer;
-import com.amolotkoff.mocker.util.IDelayFactory;
 import com.amolotkoff.mocker.parser.model.result.ResultValue;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.*;
 
+@Slf4j
 public class APIsParser {
-    private final Logger logger;
+
     private final Object map;
     private final String path;
 
     public APIsParser(Object map, String path) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
         this.path = path;
     }
 
     public Api[] Parse() throws Exception {
-        logger.info("\tparse apis...");
+        log.info("\tparse apis...");
 
         HashMap<String, Object> apis_map = Util.<HashMap<String, Object>>get(map, "api");
 
@@ -43,13 +42,13 @@ public class APIsParser {
 
         Api[] apiArray = new Api[apis.size()];
         apiArray = apis.toArray(apiArray);
-        logger.info("\tsuccess...");
+        log.info("\tsuccess...");
 
         return apiArray;
     }
 
     private Api parseAPI(Object map, String name) throws Exception {
-        logger.info("\tparse api...");
+        log.info("\tparse api...");
 
         String path = Util.<String>get(map, "path");
 

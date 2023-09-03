@@ -4,26 +4,27 @@ import com.amolotkoff.mocker.parser.model.params.Param;
 import com.amolotkoff.mocker.parser.model.result.AsyncResultValue;
 import com.amolotkoff.mocker.parser.model.result.ResultValue;
 import com.amolotkoff.mocker.parser.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
+import lombok.*;
 
 import java.util.HashMap;
 
+@Slf4j
 public class AsyncResultParser {
 
-    private final Logger logger;
     private final Object map;
     private final String path;
 
     public AsyncResultParser(Object map, String path) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
         this.path = path;
     }
 
     public AsyncResultValue Parse() throws Exception {
-        logger.info("\tparse async-result...");
+        log.info("\tparse async-result...");
 
         Object resultMap = Util.get(map, "result");
 

@@ -1,26 +1,24 @@
 package com.amolotkoff.mocker.parser.service;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+@Slf4j
 public class RequestMethodParser {
-    private final Logger logger;
     private final Object map;
 
     public RequestMethodParser(Object map) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
     }
 
     public RequestMethod Parse() throws Exception {
-        logger.info("\tparse request-method type...");
+        log.info("\tparse request-method type...");
 
         Object method = Util.get(map, "method");
         RequestMethod requestMethod = null;
 
         if (method == null) {
-            logger.warn("\tNo found request-method type, substitute GET");
+            log.warn("\tNo found request-method type, substitute GET");
             return RequestMethod.GET;
         }
 

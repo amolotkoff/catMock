@@ -2,28 +2,26 @@ package com.amolotkoff.mocker.parser.service;
 
 import com.amolotkoff.mocker.file.FileUtil;
 import com.amolotkoff.mocker.parser.exceptions.NotMapException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class HeadersParser {
-    private final Logger logger;
     private final Object map;
     private final String path;
 
     public HeadersParser(Object map, String path) {
-        this.logger = LogManager.getRootLogger();
         this.map = map;
         this.path = path;
     }
 
     public HashMap<String, String> Parse() throws Exception {
-        logger.info("\tparse headers...");
+        log.info("\tparse headers...");
 
         if (Util.has(map, "headers")) {
             HashMap<String, Object> headersMap = Util.get(map, "headers");
