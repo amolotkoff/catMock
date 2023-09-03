@@ -18,7 +18,7 @@ public class HTTPParser {
     private final String path;
 
     public HTTPParser(Object map, String path) {
-        this.logger = LogManager.getRootLogger();
+        this.logger = LogManager.getLogger();
         this.map = map;
         this.path = path;
     }

@@ -5,12 +5,13 @@ import com.amolotkoff.mocker.parser.service.*;
 import com.amolotkoff.mocker.reflect.ControllerReflectBuilder;
 import com.amolotkoff.mocker.register.*;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 import org.springframework.core.io.support.*;
+import org.slf4j.*;
 import org.springframework.core.io.Resource;
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -29,7 +30,7 @@ public class DirectoryScanner {
     @Autowired
     private ResourcePatternResolver resourceResolver;
 
-    private Logger logger = LogManager.getRootLogger();
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(DirectoryScanner.class);
 
     @PostConstruct
     public void scan() throws Exception {
