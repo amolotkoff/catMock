@@ -24,10 +24,10 @@ public class UserDynamicControllerRegister {
             options.setPatternParser(new PathPatternParser());
         */
 
-        log.info("mapping: %s\n with apis:", model.controller.getClass().getSimpleName());
+        log.info("mapping: {}\n with apis:", model.controller.getClass().getSimpleName());
 
         for (RegisterMappingModel api : model.mappings) {
-            log.info("http: %s, %s\nconsumes Content-Type:%s\nproduces Content-Type:%s",
+            log.info("http: {}, {}\n\t\tconsumes Content-Type:{}\n\t\tproduces Content-Type:{}",
                      api.requestMethod,
                      api.path,
                      api.consumes,

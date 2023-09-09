@@ -58,7 +58,7 @@ public class DirectoryScanner {
     }
 
     private void read(Path path) {
-        log.info(String.format("\t%s", path));
+        log.info(String.format("\t{}", path));
 
         try {
             String yml = new String(Files.readAllBytes(path));

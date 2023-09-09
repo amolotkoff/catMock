@@ -28,7 +28,7 @@ public class AsyncProxyParser {
 
         Path asyncPath = Paths.get(path, Util.get(httpMap, "async").toString());
 
-        log.info(String.format("\tload async at path:%s...", asyncPath));
+        log.info(String.format("\tload async at path:{}...", asyncPath));
 
         String yml = new String(Files.readAllBytes(asyncPath));
         Object asyncYAML = new Yaml().load(yml);

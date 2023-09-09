@@ -64,11 +64,15 @@ public class ControllerReflectBuilder {
                    .forEach((s) -> {
                        //logger.log(Level.INFO, String.format("\t%s", s));
 
+                       log.info("{}...", s.toString());
+
                        if (libs.length() > 1)
                            libs.append(";");
 
                        libs.append(s.toString());
                    });
+
+        log.info("end of loading libs");
 
         options.add(libs.toString());
 

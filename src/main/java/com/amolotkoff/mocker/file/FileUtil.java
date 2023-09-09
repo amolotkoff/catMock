@@ -42,7 +42,7 @@ public class FileUtil {
             return sb.toString();
         }
         catch (FileNotFoundException e) {
-            log.error(String.format("file at path:%s not found!", path));
+            log.error(String.format("file at path:{} not found!", path));
         }
         catch (Exception e) {
             log.error(e.getMessage());

@@ -7,7 +7,6 @@
         </Console>
 
         <RollingFile name="RollingFile"
-                     fileName="./logs/aaa.log"
                      filePattern="./logs/$${date:yyyy-MM}/%d{HH}-%i.log">
             <PatternLayout>
                 <pattern>%d %p %C{1.} [%t] %m%n</pattern>
