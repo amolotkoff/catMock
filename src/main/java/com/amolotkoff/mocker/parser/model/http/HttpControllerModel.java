@@ -1,7 +1,5 @@
 package com.amolotkoff.mocker.parser.model.http;
 
-import com.amolotkoff.mocker.file.FileUtil;
-import com.amolotkoff.mocker.parser.model.Import;
 import com.amolotkoff.mocker.parser.model.ScriptModel;
 import com.amolotkoff.mocker.parser.model.api.Api;
 import com.amolotkoff.mocker.parser.model.api.AsyncApi;
@@ -9,68 +7,31 @@ import com.amolotkoff.mocker.parser.model.context.MainContext;
 import com.amolotkoff.mocker.parser.model.context.SubContext;
 import com.amolotkoff.mocker.parser.model.params.Param;
 import com.amolotkoff.mocker.parser.model.result.ResultValue;
-import com.amolotkoff.mocker.util.IDelayFactory;
-import io.netty.handler.codec.Headers;
+import com.amolotkoff.mocker.parser.service.Util;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Data
+@Slf4j
 public class HttpControllerModel {
-    private final String CONTROLLER_PACKAGE = "com.amolotkoff.vtb.mock";
-    private final String IMPORTS = "import org.springframework.web.bind.annotation.*;\n" +
-                                   "import org.springframework.http.HttpStatus;\n" +
-                                   "import org.springframework.http.*;\n" +
-                                   "import org.springframework.util.*;\n" +
-                                   "import org.apache.commons.text.StringSubstitutor;\n"+
-                                   "import org.apache.logging.log4j.Logger;\n" +
-                                   "import org.apache.logging.log4j.LogManager;\n"+
-                                   "import java.util.HashMap;\n"+
-                                   "import javax.servlet.http.*;\n" +
-                                   "import java.util.Map;\n" +
-                                   "import com.amolotkoff.mocker.util.*;\n" +
-                                   "import reactor.core.publisher.Mono;\n" +
-                                   "import org.springframework.web.reactive.function.client.WebClient;\n"+
-                                   "import reactor.core.Disposable;\n" +
-                                   "import java.time.Duration;\n";
 
-    private String name;
-    private MainContext context;
-    private Api[] apis;
-    private ScriptModel script;
-    private Import imports;
+    private String CONTROLLER_PACKAGE = "com.amolotkoff.vtb.mock";
 
-    private Logger logger = LogManager.getRootLogger();
 
-    public HttpControllerModel(String name, MainContext context, Api[] apis, ScriptModel script, Import imports) {
-        this.name = name;
-        this.context = context;
-        this.apis = apis;
-        this.script = script;
-        this.imports = imports;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Api[] getApis() {
-        return apis;
-    }
+    private final String name;
+    private final MainContext context;
+    private final Api[] apis;
+    private final ScriptModel script;
 
     public String QualifiedName() {
         return String.format("%s.%s", CONTROLLER_PACKAGE, name);
-    }
-
-    public MainContext getContext() {
-        return context;
     }
 
     @Override
@@ -105,7 +66,7 @@ public class HttpControllerModel {
                         methodsBuilder.toString() +
                         "}";
 
-        logger.debug(result);
+        log.debug(result);
 
         return result;
     }
@@ -118,7 +79,7 @@ public class HttpControllerModel {
         packageBuilder.append(String.format("package %s;\n\n%s%s",
                               CONTROLLER_PACKAGE,
                               IMPORTS,
-                              imports.getImports()));
+                Parser));
     }
 
     private void contextFromCode(StringBuilder context) {

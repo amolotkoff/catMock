@@ -1,7 +1,6 @@
 package com.amolotkoff.mocker.parser.service.async;
 
 import com.amolotkoff.mocker.file.FileUtil;
-import com.amolotkoff.mocker.parser.model.Import;
 import com.amolotkoff.mocker.parser.model.ScriptModel;
 import com.amolotkoff.mocker.parser.model.api.AsyncApi;
 import com.amolotkoff.mocker.parser.model.context.MainContext;
@@ -11,11 +10,8 @@ import com.amolotkoff.mocker.parser.service.*;
 import com.amolotkoff.mocker.parser.service.delay.DelayParser;
 import com.amolotkoff.mocker.util.DelayContainer;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
-import lombok.*;
 
 import java.nio.file.Paths;
 import java.util.Collection;

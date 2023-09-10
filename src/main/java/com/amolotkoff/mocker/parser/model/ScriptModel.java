@@ -1,13 +1,12 @@
 package com.amolotkoff.mocker.parser.model;
 
+import lombok.*;
+
+@Data
 public class ScriptModel {
-    private String code;
-
-    public ScriptModel(String code) {
-        this.code = code;
-    }
-
-    public String getCode() {
-        return code;
-    }
+    private final String imports;
+    private final String action;
+    private final String onStart;
+    private final String preAction;
+    private final String postAction;
 }

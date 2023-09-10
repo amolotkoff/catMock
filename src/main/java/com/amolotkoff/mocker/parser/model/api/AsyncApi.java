@@ -1,19 +1,13 @@
 package com.amolotkoff.mocker.parser.model.api;
 
-import com.amolotkoff.mocker.parser.model.Import;
 import com.amolotkoff.mocker.parser.model.ScriptModel;
 import com.amolotkoff.mocker.parser.model.context.MainContext;
-import com.amolotkoff.mocker.parser.model.params.Param;
 import com.amolotkoff.mocker.parser.model.result.AsyncResultValue;
-import com.amolotkoff.mocker.parser.model.result.ResultValue;
 import com.amolotkoff.mocker.util.DelayContainer;
-import com.amolotkoff.mocker.util.IDelayFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 
 public class AsyncApi {
     private String name;
