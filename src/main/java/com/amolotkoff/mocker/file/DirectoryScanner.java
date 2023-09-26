@@ -1,12 +1,10 @@
 package com.amolotkoff.mocker.file;
 
-import com.amolotkoff.mocker.parser.model.http.HttpControllerModel;
-import com.amolotkoff.mocker.parser.service.*;
+import com.amolotkoff.parser.service.*;
 import com.amolotkoff.mocker.reflect.ControllerReflectBuilder;
+import com.amolotkoff.builder.strategy.*;
 import com.amolotkoff.mocker.register.*;
-import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -14,14 +12,14 @@ import org.yaml.snakeyaml.Yaml;
 import org.springframework.core.io.support.*;
 import org.springframework.core.io.Resource;
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@Service
 @Slf4j
+@Service
 public class DirectoryScanner {
+
     @Autowired
     private ControllerReflectBuilder builder;
     @Autowired
@@ -35,7 +33,7 @@ public class DirectoryScanner {
     public void scan() throws Exception {
         log.info("Start parse configurations..");
 
-        Path p = Paths.get(FileUtil.HOME_DIRECTORY.getPath(), "build");
+        Path p = Paths.get(Util.HOME_DIRECTORY.getPath(), "build");
 
         if (Files.exists(p)) {
             try {
@@ -51,7 +49,7 @@ public class DirectoryScanner {
             log.info("No found directory: build, so i download classes in resources");
             Resource[] resouces = ResourcePatternUtils.getResourcePatternResolver(resourceResolver).getResources("classpath:/static/build/*.yml");
             for (Resource resource : resouces) {
-                File file = resource.getFile();
+                java.io.File file = resource.getFile();
                 read(file.toPath());
             }
         }
@@ -64,11 +62,11 @@ public class DirectoryScanner {
             String yml = new String(Files.readAllBytes(path));
             Object parsed_yaml = new Yaml().load(yml);
 
-            if (Util.has(parsed_yaml, "async")) // we would parse it next, when we need it (for example on parsing http controller)
+            if (com.amolotkoff.parser.service.Util.has(parsed_yaml, "async")) // we would parse it next, when we need it (for example on parsing http controller)
                 return;
 
-            HTTPParser httpParser = new HTTPParser(parsed_yaml, path.toString());
-            HttpControllerModel httpModel = httpParser.Parse();
+            FileParser httpParser = new FileParser(parsed_yaml, path.toString());
+            ReflectedFile httpModel = httpParser.Parse();
             RegisterModel registerModel = builder.Build(httpModel);
             register.registerUserController(registerModel);
         }

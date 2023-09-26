@@ -1,6 +1,6 @@
 package com.amolotkoff.mocker.controllers;
 
-import com.amolotkoff.mocker.parser.model.api.Api;
+import com.amolotkoff.parser.model.api.Api;
 import com.amolotkoff.mocker.util.DelayKey;
 import org.springframework.http.MediaType;
 import org.springframework.http.*;

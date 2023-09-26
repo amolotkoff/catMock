@@ -1,17 +1,9 @@
 package com.amolotkoff.mocker;
 
-import com.amolotkoff.mocker.parser.model.http.HttpControllerModel;
-import com.amolotkoff.mocker.parser.service.HTTPParser;
-import com.amolotkoff.mocker.parser.service.Util;
-import com.amolotkoff.mocker.register.RegisterModel;
 import com.amolotkoff.mocker.util.Context;
 import com.amolotkoff.mocker.util.ContextService;
-import org.apache.commons.io.FilenameUtils;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
-import org.yaml.snakeyaml.Yaml;
-
-import java.nio.file.Files;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

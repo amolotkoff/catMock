@@ -1,5 +1,6 @@
 package com.amolotkoff.builder.strategy.util;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.amolotkoff.builder.strategy.IBuilderStrategy;
@@ -17,6 +18,16 @@ public class Formatter {
             builder.append(String.format(source, params));
 
             return this;
+        }
+
+        public FormatterBuilder format(IBuilderStrategy source) {
+            builder.append(source.toCode());
+
+            return this;
+        }
+
+        public FormatterBuilder format(String source, int tabs, String... params) {
+            return format(String.format(source, params), tabs);
         }
 
         public FormatterBuilder format(String source, int tabs) {

@@ -1,22 +1,23 @@
-package com.amolotkoff.builder.strategy.method;
+package com.amolotkoff.builder.strategy.constructor;
 
 import com.amolotkoff.builder.strategy.IBuilderStrategy;
-import java.util.List;
-
 import com.amolotkoff.builder.strategy.util.Formatter;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Builder
-public class Body implements IBuilderStrategy {
+public class Constructor implements IBuilderStrategy {
 
-    @Singular
     private final List<IBuilderStrategy> statements;
 
     @Override
     public String toCode() {
         return Formatter.builder()
-                        .format(statements, 2, "\n")
+                        .format("public %s() {", 1)
+                        .format(statements, 1, "\n")
+                        .format("}", 1)
                         .toString();
     }
 }

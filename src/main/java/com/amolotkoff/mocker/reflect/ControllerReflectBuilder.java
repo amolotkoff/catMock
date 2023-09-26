@@ -1,9 +1,10 @@
 package com.amolotkoff.mocker.reflect;
 
-import com.amolotkoff.mocker.file.FileUtil;
-import com.amolotkoff.mocker.parser.model.api.Api;
-import com.amolotkoff.mocker.parser.model.context.SubContext;
-import com.amolotkoff.mocker.parser.model.http.HttpControllerModel;
+import com.amolotkoff.builder.strategy.ReflectedFile;
+import com.amolotkoff.mocker.file.Util;
+import com.amolotkoff.parser.model.api.Api;
+import com.amolotkoff.parser.model.context.SubContext;
+import com.amolotkoff.parser.model.http.HttpControllerModel;
 import com.amolotkoff.mocker.register.*;
 import com.amolotkoff.mocker.util.*;
 import com.amolotkoff.mocker.controllers.ApiController;
@@ -46,7 +47,7 @@ public class ControllerReflectBuilder {
     }
 
     private List<String> exportLibs() {
-        Path libFolder = Paths.get(FileUtil.HOME_DIRECTORY.toPath().toString(), "lib");
+        Path libFolder = Paths.get(Util.HOME_DIRECTORY.toPath().toString(), "lib");
 
         if (!Files.exists(libFolder))
             return null;
@@ -60,7 +61,7 @@ public class ControllerReflectBuilder {
         log.info("load libs from /lib folder...");
 
         //import external libs
-        FileUtil.parseDirectory(Paths.get(FileUtil.HOME_DIRECTORY.toPath().toString(), "lib"), ".jar")
+        Util.parseDirectory(Paths.get(Util.HOME_DIRECTORY.toPath().toString(), "lib"), ".jar")
                    .forEach((s) -> {
                        //logger.log(Level.INFO, String.format("\t%s", s));
 
@@ -79,7 +80,7 @@ public class ControllerReflectBuilder {
         return options;
     }
 
-    public RegisterModel Build(HttpControllerModel model) throws Exception {
+    public RegisterModel Build(ReflectedFile model) throws Exception {
         JavaFileObject sourceFile = new JavaSourceFromString(model.QualifiedName(), model.toString());
         List<JavaFileObject> sourceFiles = new ArrayList<>();
 
